@@ -29,6 +29,8 @@ class App extends Component {
           < SearchBar onNoteTitleSelected={this.onNoteTitleSelected} />
         </nav>
         < Notes newNoteTitle={this.state.newNoteTitle} />
+      <div>
+        {this.props.children}
       </div>
     );
   }

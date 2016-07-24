@@ -1,1 +1,1 @@
-# js-starter with react
+# js-starter with react react-router babel sass and eslint
