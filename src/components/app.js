@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import Immutable from 'immutable';
 
-import Welcome from './welcome';
+import SearchBar from './search_bar';
+import Notes from './notes';
 
 // example class based component (smart component)
 class App extends Component {
@@ -8,13 +10,25 @@ class App extends Component {
     super(props);
 
     // init component state here
-    this.state = {};
+    this.state = {
+      users: Immutable.Map(),
+      newNoteTitle: '',
+    };
+
+    this.onNoteTitleSelected = this.onNoteTitleSelected.bind(this);
+  }
+
+  onNoteTitleSelected(newNoteTitle) {
+    this.setState({ newNoteTitle });
   }
 
   render() {
     return (
-      <div>
-        <Welcome />
+      <div id="app">
+        <nav>
+          < SearchBar onNoteTitleSelected={this.onNoteTitleSelected} />
+        </nav>
+        < Notes newNoteTitle={this.state.newNoteTitle} />
       </div>
     );
   }
