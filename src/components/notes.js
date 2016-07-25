@@ -8,17 +8,6 @@ class Notes extends Component {
   constructor(props) {
     super(props);
 
-    // init component state here
-    this.state = {
-      notes: Immutable.Map(),
-      currentZIndex: 0,
-      historyIndex: 0,
-      undoClass: 'unactive',
-      undoText: '',
-      history: [],
-      sidemenuClass: 'normal',
-    };
-
     this.onNoteAdd = this.onNoteAdd.bind(this);
     this.onNoteDeleted = this.onNoteDeleted.bind(this);
     this.onNoteClicked = this.onNoteClicked.bind(this);
@@ -36,7 +25,7 @@ class Notes extends Component {
 
     const data = {
       title: nextProps.newNoteTitle,
-      currentZIndex: this.state.currentZIndex,
+      currentZIndex: nextProps.noteboardState.currentZIndex,
       body: '',
       width,
       position,
@@ -46,14 +35,7 @@ class Notes extends Component {
   }
 
   onNoteAdd(data) {
-    const id = `${Math.floor(Math.random() * 9999) + 1000}-${this.state.notes.count()}`;
-
-    this.trackOperation('Added new note').then(() => {
-      this.setState({
-        notes: this.state.notes.set(id, data),
-        currentZIndex: this.state.currentZIndex + 1,
-      });
-    });
+    this.props.addNote(data);
   }
 
   onNoteDeleted(id, z) {
@@ -102,11 +84,12 @@ class Notes extends Component {
   onPositionChange(id, position) {
     this.trackOperation('Note moved').then(() => {
       const data = this.state.notes.get(id);
-
       data.position = position;
 
-      this.setState({
-        notes: this.state.notes.set(id, data),
+      this.props.updateDB(false, id, this.state).then((condition) => {
+        this.setState({
+          notes: this.state.notes.set(id, data),
+        });
       });
     });
   }
@@ -171,19 +154,28 @@ class Notes extends Component {
   }
 
   getNoteTags() {
-    if (this.state.notes.count()) {
-      return this.state.notes.entrySeq().map(([id, value], i) => {
-        return (
-          <NoteItem
-            onPositionChange={this.onPositionChange}
-            trackOperation={this.trackOperation}
-            onNoteDeleted={this.onNoteDeleted}
-            onNoteClicked={this.onNoteClicked}
-            onBodyChange={this.onBodyChange}
-            key={id} value={value} id={id}
-          />
-        );
-      });
+    if (this.props.noteboardState.notes) {
+      const notes = this.props.noteboardState.notes;
+      const notesArray = [];
+
+      // for (const key in notes) {
+      //   if (notes.hasOwnProperty(key)) {
+      //     const value = notes[key];
+      //
+      //     notesArray.push(
+      //       <NoteItem
+      //         onPositionChange={this.onPositionChange}
+      //         trackOperation={this.trackOperation}
+      //         onNoteDeleted={this.onNoteDeleted}
+      //         onNoteClicked={this.onNoteClicked}
+      //         onBodyChange={this.onBodyChange}
+      //         key={key} value={value} id={key}
+      //       />
+      //     );
+      //   }
+      // }
+
+      return notesArray;
     }
 
     return null;
@@ -232,6 +224,10 @@ class Notes extends Component {
   goToThePast(e) {
     const previousState = this.state.history[this.state.historyIndex - 1];
 
+    this.props.updateDB(true, previousState.notes.keys(), previousState.notes).then((condition) => {
+
+    });
+
     this.setState({
       notes: previousState.notes,
       currentZIndex: previousState.currentZIndex,
@@ -242,26 +238,30 @@ class Notes extends Component {
   }
 
   render() {
-    return (
-      <div id="notes">
-        <div id="sidemenu" className={this.state.sidemenuClass}>
-          <div className="left">
-            <div id="undo" className={this.state.undoClass} onClick={this.goToThePast}>
-              <div>
-                {`Undo: ${this.state.undoText}`}
+    if (this.props.noteboardState) {
+      return (
+        <div id="notes">
+          <div id="sidemenu" className={this.props.noteboardState.sidemenuClass}>
+            <div className="left">
+              <div id="undo" className={this.props.noteboardState.undoClass} onClick={this.goToThePast}>
+                <div>
+                  {`Undo: ${this.props.noteboardState.undoText}`}
+                </div>
+                <i className="fa fa-undo" aria-hidden="true" />
               </div>
-              <i className="fa fa-undo" aria-hidden="true" />
+              <i className="fa fa-th" id="grid" aria-hidden="true" onClick={this.onGrid} />
             </div>
-            <i className="fa fa-th" id="grid" aria-hidden="true" onClick={this.onGrid} />
+            <i
+              className={`fa fa-caret-right ${this.props.noteboardState.sidemenuClass}`} id="sidemenu-toggle"
+              onClick={() => { this.setState({ sidemenuClass: this.props.noteboardState.sidemenuClass === 'normal' ? 'active' : 'normal' }); }} aria-hidden="true"
+            />
           </div>
-          <i
-            className={`fa fa-caret-right ${this.state.sidemenuClass}`} id="sidemenu-toggle"
-            onClick={() => { this.setState({ sidemenuClass: this.state.sidemenuClass === 'normal' ? 'active' : 'normal' }); }} aria-hidden="true"
-          />
+          {this.getNoteTags()}
         </div>
-        {this.getNoteTags()}
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   }
 }
 
