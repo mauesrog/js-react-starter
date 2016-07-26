@@ -116,9 +116,9 @@ class App extends Component {
       popUp = (
         <div className="pop-up-name screen">
           <div className="box">
-            <h1>Type in your name</h1>
+            <h1>Type in a name for your new noteboard</h1>
             < SearchBar
-              placeholder="Your Noteboard Name"
+              placeholder="Your noteboard name"
               submitValue="Set name"
               onNoteTitleSelected={this.onNameSelected}
             />
