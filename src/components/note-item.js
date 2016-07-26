@@ -6,12 +6,11 @@ class NoteItem extends Component {
   constructor(props) {
     super(props);
 
-    console.log(this.props.value.currentZIndex);
-
     this.state = {
       markdownClass: 'note-body normal',
       inputClass: 'note-body normal',
       dragClass: 'fa fa-arrows',
+      temporalZIndex: 0,
     };
 
     this.onStart = this.onStart.bind(this);
@@ -21,20 +20,24 @@ class NoteItem extends Component {
   }
 
   onStart(e, ui) {
-    this.props.onNoteClicked(this.props.id, this.state.zIndex, (zIndex) => {
-      this.setState({
-        zIndex,
-        dragClass: 'fa fa-arrows dragging',
-      });
-    });
+    const draggedElement = e.target.parentElement.parentElement;
+    const temporalZIndex = draggedElement.style.zIndex;
+
+    draggedElement.style.zIndex = 100;
+
+    this.setState({ temporalZIndex });
+    this.props.onNoteClicked(this.props.id, this.state.zIndex);
   }
 
   onStop(e, ui) {
+    const draggedElement = e.target.parentElement.parentElement;
+
     this.setState({
       dragClass: 'fa fa-arrows',
     });
 
     this.props.onPositionChange(this.props.id, [ui.x, ui.y]);
+    draggedElement.style.zIndex = this.state.temporalZIndex;
   }
 
   onEdit() {
@@ -71,7 +74,7 @@ class NoteItem extends Component {
             width: `${this.props.value.width}px`,
             zIndex: this.props.value.currentZIndex,
           }}
-            onClick={() => { this.props.onNoteClicked(this.props.id, this.props.value.currentZIndex); }}
+            onClick={(e) => { this.props.onNoteClicked(this.props.id, this.props.value.currentZIndex); }}
           >
             <div className="note-header">
               <div className="left-icons">

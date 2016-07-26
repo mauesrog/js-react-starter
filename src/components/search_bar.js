@@ -23,8 +23,8 @@ class SearchBar extends Component {
   render() {
     return (
       <div id="search-bar">
-        <input type="text" value={this.state.searchterm} placeholder="Add new note" onChange={this.onInputChange} />
-        <input type="submit" value="Add" onClick={this.onInputSubmit} disabled={!this.state.searchterm} />
+        <input type="text" value={this.state.searchterm} placeholder={this.props.placeholder} onChange={this.onInputChange} />
+        <input type="submit" value={this.props.submitValue} onClick={this.onInputSubmit} disabled={!this.state.searchterm} />
       </div>
     );
   }

@@ -1,9 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/app';
+import { Router, browserHistory } from 'react-router';
+import Routes from './routes.js';
 
 import './style.scss';
 
-// entry point that just renders app
-// could be used for routing at some point
-ReactDOM.render(<App />, document.getElementById('main'));
+function wholeSite() {
+  return (
+    <Router history={browserHistory}>
+      {Routes}
+    </Router>
+  );
+}
+
+ReactDOM.render(wholeSite(), document.getElementById('main'));

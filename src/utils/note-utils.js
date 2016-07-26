@@ -1,4 +1,4 @@
-const getNoteWidth = titleLength => {
+function getNoteWidth(titleLength) {
   let widthVal = 250;
 
   if (titleLength > 4) {
@@ -8,9 +8,9 @@ const getNoteWidth = titleLength => {
   }
 
   return widthVal;
-};
+}
 
-const getNotePosition = noteWidth => {
+function getNotePosition(noteWidth) {
   const windowHeight = window.innerWidth * 40 / 100;
 
   const boundsWidth = [10, window.innerWidth - noteWidth - 12];
@@ -20,11 +20,17 @@ const getNotePosition = noteWidth => {
   const py = Math.floor(Math.random() * boundsHeight[1]) + boundsHeight[0];
 
   return [px, py];
-};
+}
+
+function convertHistoryToJSON(history, index) {
+  console.log(history);
+  return history;
+}
 
 const NoteUtils = {
   getNoteWidth,
   getNotePosition,
+  convertHistoryToJSON,
 };
 
 export default NoteUtils;

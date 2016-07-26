@@ -6,6 +6,103 @@ body {
   margin: 0;
 }
 
+div.submenu {
+  top: 35%;
+  color: darken(white, 10%);
+  display: flex;
+  position: absolute;
+  z-index: 1000;
+  font-size: 1.9em;
+  width: 180px;
+  height: 250px;
+  background: rgba(0%, 0%, 0%, 0.6);
+}
+
+div.pop-up-name.screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1100;
+  width: 100%;
+  height: 100%;
+  background: rgba(0%, 0%, 0%, 0.7);
+
+  div.box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px;
+    background: white;
+    width: 80%;
+    height: 20%;
+
+    h1 {
+      margin: 0;
+    }
+  }
+}
+
+ul {
+  list-style: none;
+}
+
+aside.primary-aside {
+  width: 100%;
+  height: 50px;
+  background: rgba(0%, 0%, 0%, 0.6);
+
+  ul {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    li {
+      text-shadow: 2px 2px #000;
+      color: darken(white, 10%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+
+      i {
+        width: 50px;
+      }
+
+      &.unactive {
+
+        a {
+          pointer-events: none;
+          color: lighten(black, 50%);
+        }
+
+        i {
+          display: none;
+        }
+      }
+
+      &:hover:not(.unactive) {
+        background: linear-gradient(rgba(30%, 30%, 30%, 0.6), rgba(0%, 0%, 0%, 0.8));
+        border-radius: 10px;
+      }
+    }
+
+    a {
+      color: darken(white, 10%);
+      text-decoration: none;
+    }
+  }
+}
+
 div#app {
   display: flex;
   flex-direction: column;
@@ -19,33 +116,40 @@ div#app {
       width: 100%;
       display: flex;
       justify-content: space-around;
-      background-color: #888888;
+      background: none;
 
         input {
           font-size: 0.9em;
-          border: 1px;
+          border: 2px;
           border-radius: 6px;
+          border-style: solid;
         }
 
         input[type='submit'] {
           outline: 0;
           width: 10%;
-          box-shadow: 0 5px 0 lighten(black, 10%);
-          height: 39px;
-          transition: all .1s linear;
-        }
+          color: darken(white, 10%);
+          height: 45px;
+          border-color: lighten(black, 50%);
 
-        input[type='submit']:active {
-          box-shadow: 0 2px 0 lighten(black, 10%);
-          transform: translateY(3px);
+          &:enabled {
+            border-color: #FFF;
+            background: #000;
+
+            &:hover {
+              background: linear-gradient(rgba(15%, 15%, 15%, 0.6), rgba(0%, 0%, 0%, 1));
+            }
+
+            &:active {
+              background: linear-gradient(rgba(0%, 0%, 0%, 1), rgba(15%, 15%, 15%, 0.6));
+            }
+          }
         }
 
         input[type='text'] {
           text-indent: 0.3em;
           height: 40px;
           width: 90%;
-          border-top: 0px;
-          border-style: solid;
           border-color: #000;
         }
     }
@@ -53,7 +157,7 @@ div#app {
 
   div#notes {
     margin: 10px;
-    width: 100%;
+    width: 99%;
     height: 40vw;
 
     h1 {
@@ -61,23 +165,14 @@ div#app {
     }
 
     div#sidemenu {
-      color: darken(white, 10%);
-      display: flex;
-      position: absolute;
-      top: 25%;
       left: -145px;
       border-right: 1px;
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
-      border-right-color: black;
       border-right-style: none;
-      z-index: 100;
-      font-size: 1.9em;
-      width: 180px;
-      height: 250px;
-      background: rgba(0%, 0%, 0%, 0.6);
 
       &:hover {
+        background: linear-gradient(rgba(30%, 30%, 30%, 0.6), rgba(0%, 0%, 0%, 0.8));
         left: -135px;
       }
 
@@ -95,7 +190,7 @@ div#app {
         width: 80%;
 
         div#undo {
-          width: 100px;
+          width: 90px;
           height: 50px;
           display: flex;
           flex-direction: column;
@@ -115,6 +210,16 @@ div#app {
             pointer-events: all;
             height: 100px;
 
+            &:hover {
+              font-size: 1.1em;
+              text-shadow: 2px 2px #000;
+              height: 110px;
+
+              + i {
+                padding-bottom: 4px;
+              }
+            }
+
             div {
               display: block;
             }
@@ -124,6 +229,18 @@ div#app {
         i#grid {
           text-align: center;
           width: 100px;
+
+          &.unactive {
+            color: lighten(black, 50%);
+          }
+
+          &.active:hover {
+            font-size: 1.1em;
+            width: 130px;
+            text-shadow: 2px 2px #000;
+            padding-bottom: 23px;
+            height: 27px;
+          }
         }
       }
 
@@ -139,6 +256,82 @@ div#app {
         }
       }
     }
+
+    div#noteboardMenu {
+      right: -145px;
+      border-left: 1px;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      border-left-style: none;
+      justify-content: space-between;
+
+      &:hover {
+        background: linear-gradient(rgba(30%, 30%, 30%, 0.6), rgba(0%, 0%, 0%, 0.8));
+        right: -135px;
+      }
+
+      &.active {
+        right: 0;
+      }
+
+
+      div.right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        height: 100%;
+        width: 70%;
+        overflow-y: auto;
+
+        i {
+          font-size: 0.6em;
+          height: 40px;
+        }
+
+        ul {
+          margin: 0;
+          padding: 0;
+          height: 75%;
+          width: 100%;
+          overflow-y: auto;
+
+          li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-x: scroll;
+            font-size: 0.5em;
+            height: 40px;
+
+            &.current {
+              pointer-events: none;
+              text-shadow: 2px 2px #000;
+            }
+
+            &:hover {
+              font-size: 0.54em;
+              text-shadow: 2px 2px #000;
+            }
+          }
+        }
+      }
+
+      i#noteboard-menu-toggle {
+        font-size: 0.6em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20%;
+        text-align: center;
+
+        &.active {
+          transform: rotateZ(180deg);
+        }
+      }
+    }
+
 
     div.note {
       height: 250px;
@@ -204,6 +397,107 @@ div#app {
       textarea.editing {
         display: block;
       }
+    }
+  }
+}
+
+div#home-main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 49vw;
+  background: linear-gradient(rgba(30%, 30%, 30%, 0.6), rgba(0%, 0%, 0%, 0.8));
+  background-repeat: repeat;
+
+  div#sign-in {
+    color: darken(white, 10%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background: rgba(0%, 0%, 0%, 0.4);
+    border-radius: 10px;
+    box-shadow: 3px 3px 5px rgba(0%, 0%, 0%, 0.4);
+    width: 50%;
+    height: 70%;
+
+    img {
+      box-shadow: 3px 3px 5px rgba(0%, 0%, 0%, 0.4);
+    }
+
+    &:hover {
+      width: 51%;
+      height: 71%;
+
+      i {
+        color: #3b5998;
+        text-shadow: 4px 4px #000;
+      }
+    }
+
+    *:not(div) {
+      text-shadow: 2px 2px #000;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    div.facebook-data {
+      height: 200px;
+      justify-content: flex-start;
+    }
+
+    div.facebook-data, div#search-bar {
+      width: 80%;
+    }
+
+    div#search-bar {
+      height: 40px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      padding-bottom: 30px;
+
+      input {
+        font-size: 0.7em;
+        text-shadow: none;
+        outline: 0;
+
+        &[type="text"]{
+          height: 40px;
+          width: 90%;
+          text-indent: 0.3em;
+        }
+
+        &[type="submit"]{
+          width: 10%;
+          color: darken(white, 10%);
+          height: 48px;
+          border: 1px;
+        }
+      }
+    }
+
+    i {
+      font-size: 8em;
+      height: 220px;
+    }
+
+    h1 {
+      text-align: center;
+      width: 320px;
+    }
+
+    h1#welcome{
+      font-size: 1.5em;
+    }
+
+    h2 {
+      font-size: 1em;
     }
   }
 }
